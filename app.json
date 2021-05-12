@@ -1,0 +1,12 @@
+{
+  "name": "Grupo2-DevMob",
+  "displayName": "Grupo2-DevMob",
+  "expo": {
+    "name": "Grupo2-DevMob",
+    "slug": "Grupo2-DevMob",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
