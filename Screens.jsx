@@ -13,8 +13,8 @@ export const home = ({navigation, route,props})=> {
 
     return (
         <View style={Styles.container}>
-            <TouchableOpacity style={Styles.TouchableOpacityButton} onPress={()=>{ navigation.navigate('GameOn') }}>
-              <Text style={Styles.ButtonText}>TESTE</Text>
+            <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{ navigation.navigate('GameOn') }}>
+              <Text style={Styles.buttonText}>Iniciar</Text>
             </TouchableOpacity>
         </View>
     )
@@ -22,104 +22,121 @@ export const home = ({navigation, route,props})=> {
 
 
 export const GameOn = ({navigation, route}) => {
-
-
- 
-  
   
   const [indexQuestao, setIndexQuestao] = useState(0) 
   const [Pontuacao, setPontuacao] = useState(0) 
-  
-  function validarQuestao(index, alternativa){
-    
-    console.log(questoes[index].certa);
-    if(questoes[index].certa == alternativa){
-      setPontuacao(Pontuacao + 1);
-      console.log('Index: ', index);
-      console.log('Alternativa: ', alternativa);
-      console.log('Pontuação: ', Pontuacao);
-    }
-    setIndexQuestao(index + 1);    
-  }
-  
-  const questoes = [{
-    expressao:"2x+10 = 24",
+
+  const questoes = [
+    {
+    expressao:"2x + 10 = 24",
     certa:'7',
     alternativa1:'10',
-    alternativa2:'85',
+    alternativa2:'8',
     alternativa3:'2',
-    alternativa:'7'
+    alternativa4:'7'
   },
   {
-    expressao:"2x+10 = 2222222",
-    certa:'85',
-    alternativa1:'10',
-    alternativa2:'85',
+    expressao:"7x + 35 = 70",
+    certa:'5',
+    alternativa1:'13',
+    alternativa2:'7',
     alternativa3:'2',
-    alternativa:'7'
+    alternativa4:'5'
   },
   {
-    expressao:"2x+10 = 333333333333",
+    expressao:"2x + 5 = 19",
     certa:'7',
-    alternativa1:'10',
-    alternativa2:'85',
+    alternativa1:'7',
+    alternativa2:'6',
     alternativa3:'2',
-    alternativa:'7'
+    alternativa4:'8'
   },
   {
-    expressao:"2x+10 = 4444444444444",
-    certa:'7',
-    alternativa1:'10',
-    alternativa2:'85',
+    expressao:"14x - 21 = 63",
+    certa:'6',
+    alternativa1:'6',
+    alternativa2:'9',
+    alternativa3:'4',
+    alternativa4:'11'
+  },
+  {
+    expressao:"23 + 12x = 59",
+    certa:'3',
+    alternativa1:'3',
+    alternativa2:'4',
     alternativa3:'2',
-    alternativa:'7'
+    alternativa4:'7'
+  },
+  {
+    expressao:"3x = x + 8",
+    certa:'4',
+    alternativa1:'10',
+    alternativa2:'3',
+    alternativa3:'4',
+    alternativa4:'11'
+  },
+  {
+    expressao:"x + 5 = 20 - 4x",
+    certa:'3',
+    alternativa1:'20',
+    alternativa2:'8',
+    alternativa3:'4',
+    alternativa4:'3'
   }
   ]
+
+  function validarQuestao(index, alternativa){        
+    
+    if(questoes[index].certa == alternativa){
+      setPontuacao(Pontuacao + 1);
+    }    
+    
+    setIndexQuestao(index + 1);    
+  } 
  
-  useEffect(()=>{
-    console.log('Pontuação nova: ', Pontuacao);
-  },[Pontuacao]);
+  // useEffect(()=>{
+  //   console.log('Pontuação nova: ', Pontuacao);
+  // },[Pontuacao]);
  
  
   return (
-        questoes.map((item, index) => {
+    questoes.map((questao, index) => {
+      
+        return(
           
-            return(
-              
-              (indexQuestao == index) && <View style={Styles.container}>
-              <TouchableOpacity style={Styles.TouchableOpacityButton} /* onPress={()=>{  }} */>
-                <Text style={Styles.ButtonText}>{item.expressao}</Text>
+          (indexQuestao == index) && 
+          <View style={Styles.container}>
+            <Text style={Styles.expressao}>{questao.expressao}</Text>
+
+            <View style = {Styles.alternativas}>
+              <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{ 
+                validarQuestao(index, questao.alternativa1)
+                }}>
+                <Text style={Styles.buttonText}>{questao.alternativa1}</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={Styles.TouchableOpacityButton} onPress={()=>{ 
-                validarQuestao(index, item.alternativa)
-               }}>
-                <Text style={Styles.ButtonText}>{item.alternativa}</Text>
-              </TouchableOpacity>
-    
-              <TouchableOpacity style={Styles.TouchableOpacityButton} onPress={()=>{ 
-                validarQuestao(index, item.alternativa1)
-               }}>
-                <Text style={Styles.ButtonText}>{item.alternativa1}</Text>
-              </TouchableOpacity>
-    
-              <TouchableOpacity style={Styles.TouchableOpacityButton} onPress={()=>{ 
-                validarQuestao(index, item.alternativa2)
-               }}>
-                <Text style={Styles.ButtonText}>{item.alternativa2}</Text>
-              </TouchableOpacity>
-    
-              <TouchableOpacity style={Styles.TouchableOpacityButton} onPress={()=>{ 
-                validarQuestao(index, item.alternativa3)
-               }}>
-                <Text style={Styles.ButtonText}>{item.alternativa3}</Text>
+              <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{ 
+                validarQuestao(index, questao.alternativa2)
+                }}>
+                <Text style={Styles.buttonText}>{questao.alternativa2}</Text>
               </TouchableOpacity>
 
-              <Text>{Pontuacao}</Text>
+              <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{ 
+                validarQuestao(index, questao.alternativa3)
+                }}>
+                <Text style={Styles.buttonText}>{questao.alternativa3}</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{ 
+                validarQuestao(index, questao.alternativa4)
+                }}>
+                <Text style={Styles.buttonText}>{questao.alternativa4}</Text>
+              </TouchableOpacity>
             </View>
-            )
-          }
+            
+          </View>
         )
-      )
+      }
+    )
+  ) 
 }
-

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { BorderlessButton } from 'react-native-gesture-handler';
 
 const Styles = StyleSheet.create({
     container: {
@@ -6,17 +7,40 @@ const Styles = StyleSheet.create({
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
+      flexDirection: 'column'
     },
-    TouchableOpacityButton:{
-      backgroundColor: 'red',
-      width: 120,
-      height:80,
+    touchableOpacityButton:{
+      backgroundColor: '#331DF4',
+      padding: 10,
+      margin: 5,
+      width: 70,
+      height:45,
+      borderRadius: 5,
       alignItems: 'center',
-      justifyContent: 'center',
+          
     },
-  
-    ButtonText:{
-      color:'white'
+    titulo:{
+      padding: 25,
+      fontSize: 25,
+      fontWeight: "bold",
+      justifyContent: 'center',
+      alignContent: 'center',
+        
+    },
+    buttonText:{
+      color:'#fff',
+      fontSize: 18
+    },
+    alternativas: {
+      flexDirection: 'row',
+    },
+    expressao: {
+      padding: 40,
+      fontSize: 40,
+      fontWeight: "bold",
+      justifyContent: 'center',
+      alignContent: 'center',
+        
     }
   });
 
