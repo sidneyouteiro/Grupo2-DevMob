@@ -1,13 +1,7 @@
 import React, {useState,useEffect} from 'react';
 import Styles from './styles';
 import {View, Text, TouchableOpacity} from 'react-native';
-
-var expressoes = {"2x+10 = 24":["7","10","85","2"],"50-7x = -6":["8","1","5","2"],
-                  "2x = 10":["5","7","3","9"]};
-              //,"":"","":"","":"","":"","":"","":"","":"","":"","":"","":""}
-
-
-
+import BackgroundTimer from 'react-native-background-timer';
 
 export const home = ({navigation, route,props})=> {
 
@@ -18,13 +12,16 @@ export const home = ({navigation, route,props})=> {
             </TouchableOpacity>
         </View>
     )
-}
+};
 
 
 export const GameOn = ({navigation, route}) => {
   
   const [indexQuestao, setIndexQuestao] = useState(0) 
-  const [Pontuacao, setPontuacao] = useState(0) 
+  const [Pontuacao, setPontuacao] = useState(0)
+
+  const [SegundosFaltando,setSegundosFaltando] = useState(30)
+  const [TimerLigado,setTimerLigado] = useState(true) 
 
   const questoes = [
     {
@@ -86,26 +83,48 @@ export const GameOn = ({navigation, route}) => {
   ]
 
   function validarQuestao(index, alternativa){        
-    
+    setTimerLigado(false)
     if(questoes[index].certa == alternativa){
       setPontuacao(Pontuacao + 1);
     }    
-    
-    setIndexQuestao(index + 1);    
+    setSegundosFaltando(30)
+    setIndexQuestao(index + 1);
+    setTimerLigado(true)    
   } 
  
-  // useEffect(()=>{
-  //   console.log('Pontuação nova: ', Pontuacao);
-  // },[Pontuacao]);
+  const ligarTimer = ()=>{
+    BackgroundTimer.runBackgroundTimer(()=>{
+      setSegundosFaltando((segundos)=>{
+          if(segundos>0) return segundos-1
+          else return 0
+      })
+    },1000)
+  }
+
+  useEffect(()=>{
+    if(TimerLigado) ligarTimer();
+    else BackgroundTimer.stopBackgroundTimer();
+    
+    console.log('TimerLigado: ',TimerLigado);
+    console.log('SegundosFaltando: ',SegundosFaltando);
+
+    return ()=>{
+      BackgroundTimer.stopBackgroundTimer();
+    }
+  },[TimerLigado]);
+
+  useEffect(()=>{
+    if(SegundosFaltando==0) BackgroundTimer.stopBackgroundTimer();
+  },[SegundosFaltando])
  
  
   return (
-    questoes.map((questao, index) => {
-      
+    ((indexQuestao!= questoes.length) && questoes.map((questao, index) => {
         return(
-          
-          (indexQuestao == index) && 
+          (indexQuestao == index) &&
           <View style={Styles.container}>
+            <Text>{SegundosFaltando}</Text>
+
             <Text style={Styles.expressao}>{questao.expressao}</Text>
 
             <View style = {Styles.alternativas}>
@@ -136,7 +155,14 @@ export const GameOn = ({navigation, route}) => {
             
           </View>
         )
-      }
-    )
+      })) || 
+    ((indexQuestao==questoes.length) &&
+        <View style={Styles.container}>
+          <Text>Sua pontuação foi de {Pontuacao} pontos</Text>
+          <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{navigation.navigate('Home')}}>
+                <Text style={Styles.buttonText}>Voltar</Text>
+          </TouchableOpacity>
+        </View>
+    )    
   ) 
 }
