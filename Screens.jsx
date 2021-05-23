@@ -16,7 +16,7 @@ export const home = ({navigation})=> {
 
 export const GameOn = ({navigation}) => {
   
-  const SEGUNDOS_TEMPORIZADOR = 3;  
+  const SEGUNDOS_TEMPORIZADOR = 20;  
   const [indexQuestao, setIndexQuestao] = useState(0);
   const [Pontuacao, setPontuacao] = useState(0);
   const [tempo, setTempo] = useState(SEGUNDOS_TEMPORIZADOR);
