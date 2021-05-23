@@ -80,7 +80,30 @@ export const GameOn = ({navigation}) => {
     alternativa4:'3'
   }
   ]
+ 
+  /*Embaralhar array*/
 
+  function embaralhar(array) {
+    var m = array.length, t, i;
+  
+    while (m) {  
+      i = Math.floor(Math.random() * m--);
+  
+      t = array[m];
+      array[m] = array[i];
+      array[i] = t;
+    }
+  
+    return array;
+  }
+
+  const questoesEmbaralhadas = React.useMemo(() => {
+    return embaralhar(questoes);
+  }, [])
+   
+
+  /* Temporizador */
+  
   function validarQuestao(index, alternativa){
     if(questoes[index].certa == alternativa){
       setPontuacao(Pontuacao + 1);
@@ -88,7 +111,7 @@ export const GameOn = ({navigation}) => {
     setIndexQuestao(index + 1);
     setTempo(SEGUNDOS_TEMPORIZADOR);
   } 
-
+  
   useEffect(() => {
     interval = setInterval(() => {
       setTempo(tempo => tempo - 1);
@@ -106,34 +129,34 @@ export const GameOn = ({navigation}) => {
   }, [tempo]);
 
   return (
-    ((indexQuestao < questoes.length) && questoes.map((questao, index) => {
+    ((indexQuestao < questoes.length) && questoesEmbaralhadas.map((questao, index) => {
         return(
           (indexQuestao == index) &&          
-          <View style={Styles.container}>
+          <View key = {"container"} style={Styles.container}>
             <Text style = {Styles.temporizador}>Tempo: {tempo}</Text>
 
-            <Text style={Styles.expressao}>{questao.expressao}</Text>
+            <Text key = {questao.expressao} style={Styles.expressao}>Resolva: {questao.expressao}</Text>
 
-            <View style = {Styles.alternativas}>
-              <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{ 
+            <View key = {index} style = {Styles.alternativas}>
+              <TouchableOpacity key = {questao.alternativa1} style={Styles.touchableOpacityButton} onPress={()=>{ 
                 validarQuestao(index, questao.alternativa1)
                 }}>
                 <Text style={Styles.buttonText}>{questao.alternativa1}</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{ 
+              <TouchableOpacity key = {questao.alternativa2} style={Styles.touchableOpacityButton} onPress={()=>{ 
                 validarQuestao(index, questao.alternativa2)
                 }}>
                 <Text style={Styles.buttonText}>{questao.alternativa2}</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{ 
+              <TouchableOpacity key = {questao.alternativa3} style={Styles.touchableOpacityButton} onPress={()=>{ 
                 validarQuestao(index, questao.alternativa3)
                 }}>
                 <Text style={Styles.buttonText}>{questao.alternativa3}</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{ 
+              <TouchableOpacity key = {questao.alternativa4} style={Styles.touchableOpacityButton} onPress={()=>{ 
                 validarQuestao(index, questao.alternativa4)
                 }}>
                 <Text style={Styles.buttonText}>{questao.alternativa4}</Text>
@@ -144,8 +167,6 @@ export const GameOn = ({navigation}) => {
         )
       })) || 
       <View style={Styles.container}> 
-      {
-      }
       <Text style = {Styles.expressao}>Pontuação final: {Pontuacao} / {questoes.length}</Text>
       <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{navigation.navigate('Home')}}>
             <Text style={Styles.buttonText}>Voltar</Text>
