@@ -1,5 +1,6 @@
 # Grupo2-DevMob
 ![image info](./imagem.png)
+
 **Um jogo para estudar matemática e se divertir**
 
 
