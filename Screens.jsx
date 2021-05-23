@@ -2,7 +2,7 @@ import React, {useState,useEffect} from 'react';
 import Styles from './styles';
 import {View, Text, TouchableOpacity} from 'react-native';
 
-export const home = ({navigation, route,props})=> {
+export const home = ({navigation})=> {
 
     return (
         <View style={Styles.container}>
@@ -14,12 +14,14 @@ export const home = ({navigation, route,props})=> {
 };
 
 
-export const GameOn = ({navigation, route}) => {
-  const SEGUNDOS_TEMPORIZADOR = 20;  
+export const GameOn = ({navigation}) => {
+  
+  const SEGUNDOS_TEMPORIZADOR = 3;  
   const [indexQuestao, setIndexQuestao] = useState(0);
   const [Pontuacao, setPontuacao] = useState(0);
   const [tempo, setTempo] = useState(SEGUNDOS_TEMPORIZADOR);
-
+  let interval = null
+  
   const questoes = [
     {
     expressao:"2x + 10 = 24",
@@ -88,15 +90,19 @@ export const GameOn = ({navigation, route}) => {
   } 
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    interval = setInterval(() => {
       setTempo(tempo => tempo - 1);
     }, 1000);
 
-    return () => clearInterval(interval);
+    if(indexQuestao === questoes.length + 1)
+      clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    if(tempo == 0 && indexQuestao < questoes.length)  validarQuestao(indexQuestao, -1);
+    if(tempo == 0){
+      setIndexQuestao(indexQuestao + 1);
+      setTempo(SEGUNDOS_TEMPORIZADOR);
+    }
   }, [tempo]);
 
   return (
@@ -106,7 +112,7 @@ export const GameOn = ({navigation, route}) => {
           <View style={Styles.container}>
             <Text style = {Styles.temporizador}>Tempo: {tempo}</Text>
 
-            <Text style={Styles.expressao}>Resolva: {questao.expressao}</Text>
+            <Text style={Styles.expressao}>{questao.expressao}</Text>
 
             <View style = {Styles.alternativas}>
               <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{ 
@@ -145,13 +151,5 @@ export const GameOn = ({navigation, route}) => {
             <Text style={Styles.buttonText}>Voltar</Text>
       </TouchableOpacity>
     </View>
-    
-      
   )
-}
-export const GameEnd = () =>{
-  return (
-    <View style={Styles.container}> 
-    </View>
-  );
 }
