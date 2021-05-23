@@ -105,7 +105,7 @@ export const GameOn = ({navigation}) => {
   /* Temporizador */
   
   function validarQuestao(index, alternativa){
-    if(questoes[index].certa == alternativa){
+    if(questoesEmbaralhadas[index].certa == alternativa){
       setPontuacao(Pontuacao + 1);
     }    
     setIndexQuestao(index + 1);
@@ -135,7 +135,7 @@ export const GameOn = ({navigation}) => {
           <View key = {"container"} style={Styles.container}>
             <Text style = {Styles.temporizador}>Tempo: {tempo}</Text>
 
-            <Text key = {questao.expressao} style={Styles.expressao}>Resolva: {questao.expressao}</Text>
+            <Text key = {questao.expressao} style={Styles.expressao}>{questao.expressao}</Text>
 
             <View key = {index} style = {Styles.alternativas}>
               <TouchableOpacity key = {questao.alternativa1} style={Styles.touchableOpacityButton} onPress={()=>{ 
