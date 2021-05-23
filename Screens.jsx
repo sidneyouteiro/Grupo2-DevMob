@@ -1,7 +1,6 @@
 import React, {useState,useEffect} from 'react';
 import Styles from './styles';
 import {View, Text, TouchableOpacity} from 'react-native';
-import BackgroundTimer from 'react-native-background-timer';
 
 export const home = ({navigation, route,props})=> {
 
@@ -16,12 +15,10 @@ export const home = ({navigation, route,props})=> {
 
 
 export const GameOn = ({navigation, route}) => {
-  
-  const [indexQuestao, setIndexQuestao] = useState(0) 
-  const [Pontuacao, setPontuacao] = useState(0)
-
-  const [SegundosFaltando,setSegundosFaltando] = useState(30)
-  const [TimerLigado,setTimerLigado] = useState(true) 
+  const SEGUNDOS_TEMPORIZADOR = 20;  
+  const [indexQuestao, setIndexQuestao] = useState(0);
+  const [Pontuacao, setPontuacao] = useState(0);
+  const [tempo, setTempo] = useState(SEGUNDOS_TEMPORIZADOR);
 
   const questoes = [
     {
@@ -82,50 +79,34 @@ export const GameOn = ({navigation, route}) => {
   }
   ]
 
-  function validarQuestao(index, alternativa){        
-    setTimerLigado(false)
+  function validarQuestao(index, alternativa){
     if(questoes[index].certa == alternativa){
       setPontuacao(Pontuacao + 1);
     }    
-    setSegundosFaltando(30)
     setIndexQuestao(index + 1);
-    setTimerLigado(true)    
+    setTempo(SEGUNDOS_TEMPORIZADOR);
   } 
- 
-  const ligarTimer = ()=>{
-    BackgroundTimer.runBackgroundTimer(()=>{
-      setSegundosFaltando((segundos)=>{
-          if(segundos>0) return segundos-1
-          else return 0
-      })
-    },1000)
-  }
 
-  useEffect(()=>{
-    if(TimerLigado) ligarTimer();
-    else BackgroundTimer.stopBackgroundTimer();
-    
-    console.log('TimerLigado: ',TimerLigado);
-    console.log('SegundosFaltando: ',SegundosFaltando);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTempo(tempo => tempo - 1);
+    }, 1000);
 
-    return ()=>{
-      BackgroundTimer.stopBackgroundTimer();
-    }
-  },[TimerLigado]);
+    return () => clearInterval(interval);
+  }, []);
 
-  useEffect(()=>{
-    if(SegundosFaltando==0) BackgroundTimer.stopBackgroundTimer();
-  },[SegundosFaltando])
- 
- 
+  useEffect(() => {
+    if(tempo == 0 && indexQuestao < questoes.length)  validarQuestao(indexQuestao, -1);
+  }, [tempo]);
+
   return (
-    ((indexQuestao!= questoes.length) && questoes.map((questao, index) => {
+    ((indexQuestao < questoes.length) && questoes.map((questao, index) => {
         return(
-          (indexQuestao == index) &&
+          (indexQuestao == index) &&          
           <View style={Styles.container}>
-            <Text>{SegundosFaltando}</Text>
+            <Text style = {Styles.temporizador}>Tempo: {tempo}</Text>
 
-            <Text style={Styles.expressao}>{questao.expressao}</Text>
+            <Text style={Styles.expressao}>Resolva: {questao.expressao}</Text>
 
             <View style = {Styles.alternativas}>
               <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{ 
@@ -156,13 +137,21 @@ export const GameOn = ({navigation, route}) => {
           </View>
         )
       })) || 
-    ((indexQuestao==questoes.length) &&
-        <View style={Styles.container}>
-          <Text>Sua pontuação foi de {Pontuacao} pontos</Text>
-          <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{navigation.navigate('Home')}}>
-                <Text style={Styles.buttonText}>Voltar</Text>
-          </TouchableOpacity>
-        </View>
-    )    
-  ) 
+      <View style={Styles.container}> 
+      {
+      }
+      <Text style = {Styles.expressao}>Pontuação final: {Pontuacao} / {questoes.length}</Text>
+      <TouchableOpacity style={Styles.touchableOpacityButton} onPress={()=>{navigation.navigate('Home')}}>
+            <Text style={Styles.buttonText}>Voltar</Text>
+      </TouchableOpacity>
+    </View>
+    
+      
+  )
+}
+export const GameEnd = () =>{
+  return (
+    <View style={Styles.container}> 
+    </View>
+  );
 }

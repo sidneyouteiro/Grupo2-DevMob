@@ -13,7 +13,7 @@ const Styles = StyleSheet.create({
       backgroundColor: '#331DF4',
       padding: 10,
       margin: 5,
-      width: 70,
+      width: 72,
       height:45,
       borderRadius: 5,
       alignItems: 'center',
@@ -35,12 +35,16 @@ const Styles = StyleSheet.create({
       flexDirection: 'row',
     },
     expressao: {
-      padding: 40,
-      fontSize: 40,
+      padding: 20,
+      fontSize: 35,
       fontWeight: "bold",
       justifyContent: 'center',
       alignContent: 'center',
         
+    }, 
+    temporizador:{
+      fontWeight: "bold",
+      fontSize: 20
     }
   });
 
